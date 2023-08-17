@@ -1,35 +1,23 @@
-import * as trpcNext from "@trpc/server/adapters/next";
-import { z } from "zod";
-import { publicProcedure, router } from "../../../server/trpc";
+import * as trpcNext from "@trpc/server/adapters/next"
+import { z } from "zod"
+import { ItemSchema, NewItemSchema } from "../../../server/models/item"
+import itemService from "../../../server/services/itemService"
+import { publicProcedure, router } from "../../../server/trpc"
 
 const appRouter = router({
-  greeting: publicProcedure
-    .input(
-      z.object({
-        name: z.string(),
-      })
-    )
-    .output(
-      z.object({
-        message: z.string(),
-      })
-    )
-    .query(async ({ input }) => {
-      await delay(2000);
+  getItems: publicProcedure
+    .output(z.array(ItemSchema))
+    .query(itemService.getItems),
 
-      return {
-        message: `Hello ${input.name}!`,
-      };
-    }),
-});
+  addItem: publicProcedure
+    .input(NewItemSchema)
+    .output(ItemSchema)
+    .mutation(({ input }) => itemService.addItem(input)),
+})
 
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-export type AppRouter = typeof appRouter;
+export type AppRouter = typeof appRouter
 
 export default trpcNext.createNextApiHandler({
   router: appRouter,
   createContext: () => ({}),
-});
+})

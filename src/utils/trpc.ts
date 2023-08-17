@@ -1,10 +1,12 @@
-import { httpBatchLink } from "@trpc/client";
-import { createTRPCNext } from "@trpc/next";
-import { AppRouter } from "../pages/api/trpc/[trpc]";
+import { httpBatchLink } from "@trpc/client"
+import { createTRPCNext } from "@trpc/next"
+import { AppRouter } from "../pages/api/trpc/[trpc]"
 
-const baseUrl = "http://localhost:3000";
+const baseUrl = "http://localhost:3000"
 
 export const trpc = createTRPCNext<AppRouter>({
+  abortOnUnmount: true,
+
   config() {
     return {
       links: [
@@ -12,8 +14,15 @@ export const trpc = createTRPCNext<AppRouter>({
           url: baseUrl + "/api/trpc",
         }),
       ],
-    };
-  },
 
-  ssr: false,
-});
+      queryClientConfig: {
+        defaultOptions: {
+          queries: {
+            refetchOnMount: false,
+            refetchOnWindowFocus: false,
+          },
+        },
+      },
+    }
+  },
+})
