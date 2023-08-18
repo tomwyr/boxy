@@ -1,14 +1,14 @@
-export interface ItemFormActionsProps {
+export interface ItemFormFooterProps {
   submitLabel: string
   onSubmit: () => void
   onCancel: () => void
 }
 
-export function ItemFormActions({
+export function ItemFormFooter({
   submitLabel,
   onSubmit,
   onCancel,
-}: ItemFormActionsProps) {
+}: ItemFormFooterProps) {
   return (
     <div className="my-2 flex w-full justify-end">
       <button className="px-4 mx-4" onClick={onCancel}>

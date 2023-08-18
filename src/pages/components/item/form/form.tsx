@@ -1,12 +1,13 @@
 import { trpc } from "../../../../utils/trpc"
 import { Dialog } from "../../dialog"
-import { ItemFormSubmitAction } from "./utils/submitAction"
-import { ItemFormActions } from "./actions"
 import { useItemFormContext } from "./controller"
+import { ItemFormFooter } from "./footer"
+import { ItemFormHeader } from "./header"
 import { ItemFormImage } from "./image"
 import { ItemFormName } from "./name"
-import { getItemFormProcessor } from "./utils/processor"
 import { ItemFormRarity } from "./rarity"
+import { getItemFormProcessor } from "./utils/processor"
+import { ItemFormSubmitAction } from "./utils/submitAction"
 
 export interface ItemFormProps {
   action: ItemFormSubmitAction
@@ -39,14 +40,7 @@ export function ItemForm({ action }: ItemFormProps) {
         action="#"
         method="post"
       >
-        <div className="flex justify-between">
-          <h3 className="font-bold">{title}</h3>
-          {itemProcessor.onDelete && (
-            <button className="text-red-500 " onClick={itemProcessor.onDelete}>
-              Delete
-            </button>
-          )}
-        </div>
+        <ItemFormHeader title={title} onDelete={itemProcessor.onDelete} />
 
         <div className="my-2 flex flex-col">
           <ItemFormName initialValue={initialValue?.name} />
@@ -54,7 +48,7 @@ export function ItemForm({ action }: ItemFormProps) {
           <ItemFormImage initialValue={initialValue?.imageUrl} />
         </div>
 
-        <ItemFormActions
+        <ItemFormFooter
           submitLabel={submitLabel}
           onSubmit={itemProcessor.onSubmit}
           onCancel={itemFormContext.closeForm}

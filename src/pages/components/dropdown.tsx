@@ -39,12 +39,7 @@ export function Dropdown<T>({
 
   return (
     <div ref={menuRef}>
-      <button
-        className={className}
-        type="button"
-        role="button"
-        onClick={toggleMenu}
-      >
+      <button className={className} type="button" onClick={toggleMenu}>
         {selectedItem?.label}
       </button>
 
