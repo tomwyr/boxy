@@ -1,4 +1,4 @@
-import { PlusIcon } from "../icons"
+import { PlusIcon } from "../icons/plus"
 import { ListItem } from "../listItem"
 
 export interface NewItemButtonProps {

@@ -19,9 +19,7 @@ export function Dropdown<T>({
   items,
   onSelect,
 }: DropdownParams<T>) {
-  const initialItem = items.find(
-    (item) => item.value == initialValue,
-  ) as DropdownItem<T>
+  const initialItem = items.find((item) => item.value == initialValue)
 
   const menuRef = useRef<any>()
   const [selectedItem, setSelectedItem] = useState(initialItem)

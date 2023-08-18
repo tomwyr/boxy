@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Item } from "../../../server/models/item"
-import { NewItemButton } from "../newItem/button"
-import { useNewItemContext } from "../newItem/controller"
+import { NewItemButton } from "./newButton"
+import { useItemFormContext } from "./form/controller"
 import { ItemTile } from "./tile"
 
 export interface ItemListProps {
@@ -9,10 +9,10 @@ export interface ItemListProps {
 }
 
 export function ItemList({ items }: ItemListProps) {
-  const newItemContext = useNewItemContext()
+  const newItemContext = useItemFormContext()
   const [selectedItems, setSelectedItems] = useState<Item[]>([])
 
-  function onItemClick(item: Item) {
+  function switchItemSelection(item: Item) {
     const index = selectedItems.indexOf(item)
     const updatedItems = [...selectedItems]
 
@@ -26,17 +26,18 @@ export function ItemList({ items }: ItemListProps) {
   }
 
   return (
-    <ul className="list-none p-4">
-      {items.map((item) => (
-        <ItemTile
-          key={item.id}
-          item={item}
-          selected={selectedItems.includes(item)}
-          onClick={() => onItemClick(item)}
-        />
-      ))}
+    <>
+      <ul className="list-none">
+        {items.map((item) => (
+          <ItemTile
+            key={item.id}
+            item={item}
+            onClick={() => newItemContext.showForm(item)}
+          />
+        ))}
+      </ul>
 
-      <NewItemButton key="new-item-button" onClick={newItemContext.showForm} />
-    </ul>
+      <NewItemButton onClick={() => newItemContext.showForm()} />
+    </>
   )
 }

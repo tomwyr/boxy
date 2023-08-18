@@ -17,3 +17,9 @@ export const NewItemSchema = z.object({
 })
 
 export type NewItem = z.infer<typeof NewItemSchema>
+
+export const DeleteItemInputSchema = z.object({
+  itemId: z.string(),
+})
+
+export type DeleteItemInput = z.infer<typeof DeleteItemInputSchema>

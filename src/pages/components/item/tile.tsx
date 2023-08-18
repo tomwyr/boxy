@@ -5,11 +5,11 @@ import { ItemImage } from "./image"
 
 export interface ItemTileProps {
   item: Item
-  selected: boolean
+  selected?: boolean
   onClick: () => void
 }
 
-export function ItemTile({ item, selected, onClick }: ItemTileProps) {
+export function ItemTile({ item, selected = false, onClick }: ItemTileProps) {
   const rarityProps = ItemRarityProps(item.rarity)
   const rarityName = rarityProps.name
   const rarityTextColor = rarityProps.textColor

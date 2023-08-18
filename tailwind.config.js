@@ -4,11 +4,11 @@ module.exports = {
   theme: {
     extend: {
       width: {
-        'dialog': '576px',
+        dialog: "576px",
       },
 
       minWidth: {
-        'dropdown-menu-item': '96px',
+        "dropdown-menu-item": "96px",
       },
 
       colors: {
@@ -24,11 +24,11 @@ module.exports = {
   safelist: [
     {
       pattern: /item-rarity/,
-      variants: ['hover'],
+      variants: ["hover"],
     },
     {
       pattern: /blue/,
-      variants: ['hover'],
-    }
+      variants: ["hover"],
+    },
   ],
 }

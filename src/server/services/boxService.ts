@@ -1,10 +1,11 @@
 import { Box, BoxOpeningResult } from "../models/box"
-import { Item, ItemRarity } from "../models/item"
+import { Item } from "../models/item"
+import { getItemRarityProbability } from "../models/itemRarity"
 
 const boxService = {
   open(box: Box): BoxOpeningResult {
     const totalProbability = box.items.reduce(
-      (total, item) => total + ItemRarity.getProbability(item.rarity),
+      (total, item) => total + getItemRarityProbability(item.rarity),
       0.0,
     )
 
@@ -14,7 +15,7 @@ const boxService = {
 
     let currentProbabilityShift = 0.0
     for (let item of box.items) {
-      currentProbabilityShift += ItemRarity.getProbability(item.rarity)
+      currentProbabilityShift += getItemRarityProbability(item.rarity)
       if (currentProbabilityShift >= rewardProbabilityShift) {
         reward = item
         break
@@ -22,7 +23,7 @@ const boxService = {
     }
 
     if (!reward) {
-      throw "dupa"
+      throw "Reward not found."
     }
 
     return {

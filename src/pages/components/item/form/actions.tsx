@@ -1,9 +1,14 @@
-export interface NewItemActionsProps {
+export interface ItemFormActionsProps {
+  submitLabel: string
   onSubmit: () => void
   onCancel: () => void
 }
 
-export function NewItemActions({ onSubmit, onCancel }: NewItemActionsProps) {
+export function ItemFormActions({
+  submitLabel,
+  onSubmit,
+  onCancel,
+}: ItemFormActionsProps) {
   return (
     <div className="my-2 flex w-full justify-end">
       <button className="px-4 mx-4" onClick={onCancel}>
@@ -15,7 +20,7 @@ export function NewItemActions({ onSubmit, onCancel }: NewItemActionsProps) {
         type="button"
         onClick={onSubmit}
       >
-        Add
+        {submitLabel}
       </button>
     </div>
   )

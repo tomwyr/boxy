@@ -2,29 +2,32 @@ import { useSubscription } from "observable-hooks"
 import { trpc } from "../utils/trpc"
 import { ItemList } from "./components/item/list"
 import {
-  NewItemController,
-  useNewItemContext,
-} from "./components/newItem/controller"
+  ItemFormController,
+  useItemFormContext,
+} from "./components/item/form/controller"
 
 export default function HomePage() {
   return (
-    <NewItemController>
+    <ItemFormController>
       <div className="w-full md:w-7/12 ">
-        <div className="flex p-4">
+        <div className="p-4 flex justify-between">
           <h1 className="text-4xl">Select items</h1>
-          <button className="py-1 px-4 border self-center ml-auto">Edit</button>
+          <button className="py-1 px-4 border">Edit</button>
         </div>
-        <AllItems />
+        <Items />
       </div>
-    </NewItemController>
+    </ItemFormController>
   )
 }
 
-function AllItems() {
+function Items() {
   const result = trpc.getItems.useQuery()
+  const newItemContext = useItemFormContext()
+  useSubscription(newItemContext.itemsChangedEvents, () => result.refetch())
 
-  const newItemContext = useNewItemContext()
-  useSubscription(newItemContext.itemAddedEvents, () => result.refetch())
-
-  return !result.data ? "Loading..." : <ItemList items={result.data} />
+  return (
+    <div className="p-4">
+      {!result.data ? "Loading..." : <ItemList items={result.data} />}
+    </div>
+  )
 }

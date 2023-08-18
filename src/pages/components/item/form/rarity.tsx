@@ -2,13 +2,16 @@ import { useState } from "react"
 import {
   ItemRarity,
   getItemRarityValue,
-} from "../../../server/models/itemRarity"
-import ItemRarityProps from "../../utils/itemRarityProps"
-import { Dropdown } from "../dropdown"
-import { NewItemInputLabel, NewItemInputStyle } from "./input"
+} from "../../../../server/models/itemRarity"
+import ItemRarityProps from "../../../utils/itemRarityProps"
+import { Dropdown } from "../../dropdown"
+import { ItemFormInputLabel, ItemFormInputStyle } from "./input"
 
-export function NewItemRarity() {
-  const initialValue = ItemRarity.common
+export interface ItemFormRarityProps {
+  initialValue: ItemRarity | undefined
+}
+
+export function ItemFormRarity({ initialValue }: ItemFormRarityProps) {
   const [currentValue, setCurrentValue] = useState(initialValue)
 
   const items = rarities.map((rarity) => ({
@@ -19,16 +22,16 @@ export function NewItemRarity() {
 
   return (
     <>
-      <NewItemInputLabel name="rarity" label="Rarity" />
+      <ItemFormInputLabel name="rarity" label="Rarity" />
       <input
         className="hidden"
         type="number"
         name="rarity"
         readOnly={true}
-        value={currentValue}
+        value={currentValue ?? -1}
       />
       <Dropdown
-        className={NewItemInputStyle}
+        className={ItemFormInputStyle}
         initialValue={initialValue}
         items={items}
         onSelect={setCurrentValue}
