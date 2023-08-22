@@ -6,9 +6,10 @@ export interface ItemFormHeaderProps {
 export function ItemFormHeader({ title, onDelete }: ItemFormHeaderProps) {
   return (
     <div className="flex justify-between">
-      <h3 className="font-bold">{title}</h3>
+      <h1 className="text-2xl">{title}</h1>
+
       {onDelete && (
-        <button className="text-red-500 " type="button" onClick={onDelete}>
+        <button className="text-red-400 " type="button" onClick={onDelete}>
           Delete
         </button>
       )}

@@ -9,7 +9,7 @@ export interface ItemListProps {
 }
 
 export function ItemList({ items }: ItemListProps) {
-  const newItemContext = useItemFormContext()
+  const itemFormContext = useItemFormContext()
   const [selectedItems, setSelectedItems] = useState<Item[]>([])
 
   function switchItemSelection(item: Item) {
@@ -32,12 +32,12 @@ export function ItemList({ items }: ItemListProps) {
           <ItemTile
             key={item.id}
             item={item}
-            onClick={() => newItemContext.showForm(item)}
+            onClick={() => itemFormContext.showForm(item)}
           />
         ))}
       </ul>
 
-      <NewItemButton onClick={() => newItemContext.showForm()} />
+      <NewItemButton onClick={() => itemFormContext.showForm()} />
     </>
   )
 }

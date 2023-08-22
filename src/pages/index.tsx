@@ -22,8 +22,8 @@ export default function HomePage() {
 
 function Items() {
   const result = trpc.getItems.useQuery()
-  const newItemContext = useItemFormContext()
-  useSubscription(newItemContext.itemsChangedEvents, () => result.refetch())
+  const itemFormContext = useItemFormContext()
+  useSubscription(itemFormContext.itemsChangedEvents, () => result.refetch())
 
   return (
     <div className="p-4">

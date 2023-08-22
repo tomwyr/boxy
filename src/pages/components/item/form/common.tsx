@@ -1,3 +1,5 @@
+export const itemFormName = "item-form"
+
 export const ItemFormInputStyle = "border rounded-md p-2 self-start"
 
 export interface ItemFormInputLabelProps {

@@ -2,8 +2,8 @@ import { useObservableCallback } from "observable-hooks"
 import { ReactNode, createContext, useContext, useState } from "react"
 import { Observable } from "rxjs"
 import { Item } from "../../../../server/models/item"
-import { ItemFormSubmitAction } from "./utils/submitAction"
-import { ItemForm } from "./form"
+import { ItemFormType } from "./types/type"
+import { ItemFormDialog } from "./dialog"
 
 export const useItemFormContext = () => {
   return useContext(ItemFormContext) as ItemFormContextType
@@ -14,26 +14,29 @@ export interface ItemFormControllerProps {
 }
 
 export function ItemFormController({ children }: ItemFormControllerProps) {
-  const [itemAction, setItemAction] = useState<
-    ItemFormSubmitAction | undefined
-  >()
+  const [formType, setFormType] = useState<ItemFormType | undefined>()
   const [notifyItemsChanged, itemsChangedEvents] = useObservableCallback()
 
   const props = {
     itemsChangedEvents: itemsChangedEvents,
-    notifyItemsChanged: notifyItemsChanged,
     showForm: (item?: Item) => {
-      setItemAction(item ? { kind: "edit", item: item } : { kind: "add" })
-    },
-    closeForm: () => {
-      setItemAction(undefined)
+      setFormType(item ? { kind: "edit", item: item } : { kind: "add" })
     },
   }
 
   return (
     <ItemFormContext.Provider value={props}>
       {children}
-      {itemAction && <ItemForm action={itemAction} />}
+      {formType && (
+        <ItemFormDialog
+          formType={formType}
+          onSuccess={() => {
+            notifyItemsChanged()
+            setFormType(undefined)
+          }}
+          onCancel={() => setFormType(undefined)}
+        />
+      )}
     </ItemFormContext.Provider>
   )
 }
@@ -44,7 +47,5 @@ const ItemFormContext = createContext<ItemFormContextType | undefined>(
 
 export interface ItemFormContextType {
   itemsChangedEvents: Observable<void>
-  notifyItemsChanged: () => void
   showForm: (item?: Item) => void
-  closeForm: () => void
 }

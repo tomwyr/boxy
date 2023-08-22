@@ -1,77 +1,93 @@
+import { ItemSchema, NewItemSchema } from "../../../../server/models/item"
 import { trpc } from "../../../../utils/trpc"
-import { Dialog } from "../../dialog"
-import { useItemFormContext } from "./controller"
+import { itemFormName } from "./common"
 import { ItemFormFooter } from "./footer"
 import { ItemFormHeader } from "./header"
 import { ItemFormImage } from "./image"
 import { ItemFormName } from "./name"
 import { ItemFormRarity } from "./rarity"
-import { getItemFormProcessor } from "./utils/processor"
-import { ItemFormSubmitAction } from "./utils/submitAction"
+
+import { ItemFormType } from "./types/type"
 
 export interface ItemFormProps {
-  action: ItemFormSubmitAction
+  formType: ItemFormType
+  onDelete: (() => void) | undefined
+  onSuccess: () => void
+  onCancel: () => void
 }
 
-export function ItemForm({ action }: ItemFormProps) {
-  const formName = "item-form"
-  const itemFormContext = useItemFormContext()
+export function ItemForm({
+  formType,
+  onDelete,
+  onSuccess,
+  onCancel,
+}: ItemFormProps) {
+  const addItem = trpc.addItem.useMutation().mutateAsync
+  const updateItem = trpc.updateItem.useMutation().mutateAsync
 
-  const addItemMutation = trpc.addItem.useMutation()
-  const updateItemMutation = trpc.updateItem.useMutation()
-  const deleteItemMutation = trpc.deleteItem.useMutation()
+  const { initialValue, title, submitLabel, onSubmit } = (() => {
+    switch (formType.kind) {
+      case "add":
+        return {
+          initialValue: undefined,
+          title: "Add item",
+          submitLabel: "Add",
+          onSubmit: async () => {
+            const newItem = NewItemSchema.parse(getItemFormData())
+            await addItem(newItem)
+            onSuccess()
+          },
+        }
 
-  const itemProcessor = getItemFormProcessor({
-    formName: formName,
-    action: action,
-    itemFormContext: itemFormContext,
-    addItem: (newItem) => addItemMutation.mutateAsync(newItem),
-    updateItem: (item) => updateItemMutation.mutateAsync(item),
-    deleteItem: (input) => deleteItemMutation.mutateAsync(input),
-  })
-
-  const { initialValue, title, submitLabel } = getActionProps(action)
+      case "edit":
+        return {
+          initialValue: formType.item,
+          title: "Edit item",
+          submitLabel: "Save",
+          onSubmit: async () => {
+            const itemData = {
+              id: formType.item.id,
+              ...getItemFormData(),
+            }
+            const item = ItemSchema.parse(itemData)
+            await updateItem(item)
+            onSuccess()
+          },
+        }
+    }
+  })()
 
   return (
-    <Dialog>
-      <form
-        encType="multipart/form-data"
-        name={formName}
-        action="#"
-        method="post"
-      >
-        <ItemFormHeader title={title} onDelete={itemProcessor.onDelete} />
+    <form
+      encType="multipart/form-data"
+      name={itemFormName}
+      action="#"
+      method="post"
+    >
+      <ItemFormHeader title={title} onDelete={onDelete} />
 
-        <div className="my-2 flex flex-col">
-          <ItemFormName initialValue={initialValue?.name} />
-          <ItemFormRarity initialValue={initialValue?.rarity} />
-          <ItemFormImage initialValue={initialValue?.imageUrl} />
-        </div>
+      <div className="my-2 flex flex-col">
+        <ItemFormName initialValue={initialValue?.name} />
+        <ItemFormRarity initialValue={initialValue?.rarity} />
+        <ItemFormImage initialValue={initialValue?.imageUrl} />
+      </div>
 
-        <ItemFormFooter
-          submitLabel={submitLabel}
-          onSubmit={itemProcessor.onSubmit}
-          onCancel={itemFormContext.closeForm}
-        />
-      </form>
-    </Dialog>
+      <ItemFormFooter
+        confirmBg="bg-green-400"
+        confirmLabel={submitLabel}
+        onSubmit={onSubmit}
+        onCancel={onCancel}
+      />
+    </form>
   )
 }
 
-function getActionProps(action: ItemFormSubmitAction) {
-  switch (action.kind) {
-    case "add":
-      return {
-        initialValue: undefined,
-        title: "Add item",
-        submitLabel: "Add",
-      }
+function getItemFormData() {
+  const formSelector = `[name='${itemFormName}']`
+  const form = document.querySelector(formSelector) as HTMLFormElement
+  const formData = Object.fromEntries<any>(new FormData(form))
 
-    case "edit":
-      return {
-        initialValue: action.item,
-        title: "Edit item",
-        submitLabel: "Save",
-      }
-  }
+  formData.rarity = parseInt(formData.rarity)
+
+  return formData
 }

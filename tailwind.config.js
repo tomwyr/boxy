@@ -27,7 +27,7 @@ module.exports = {
       variants: ["hover"],
     },
     {
-      pattern: /blue/,
+      pattern: /(red|green|blue)/,
       variants: ["hover"],
     },
   ],

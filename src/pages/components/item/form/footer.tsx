@@ -1,26 +1,28 @@
 export interface ItemFormFooterProps {
-  submitLabel: string
+  confirmBg: string
+  confirmLabel: string
   onSubmit: () => void
   onCancel: () => void
 }
 
 export function ItemFormFooter({
-  submitLabel,
+  confirmBg,
+  confirmLabel,
   onSubmit,
   onCancel,
 }: ItemFormFooterProps) {
   return (
     <div className="my-2 flex w-full justify-end">
-      <button className="px-4 mx-4" onClick={onCancel}>
+      <button className="px-4 mx-4" type="button" onClick={onCancel}>
         Cancel
       </button>
 
       <button
-        className="px-4 mx-4 bg-green-400"
+        className={`px-4 mx-4 ${confirmBg}`}
         type="button"
         onClick={onSubmit}
       >
-        {submitLabel}
+        {confirmLabel}
       </button>
     </div>
   )

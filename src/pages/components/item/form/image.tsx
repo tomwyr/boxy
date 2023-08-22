@@ -1,4 +1,4 @@
-import { ItemFormInputLabel, ItemFormInputStyle } from "./input"
+import { ItemFormInputLabel, ItemFormInputStyle } from "./common"
 
 export interface ItemFormImageProps {
   initialValue: string | undefined

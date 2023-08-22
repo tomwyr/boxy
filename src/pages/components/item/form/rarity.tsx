@@ -5,7 +5,7 @@ import {
 } from "../../../../server/models/itemRarity"
 import ItemRarityProps from "../../../utils/itemRarityProps"
 import { Dropdown } from "../../dropdown"
-import { ItemFormInputLabel, ItemFormInputStyle } from "./input"
+import { ItemFormInputLabel, ItemFormInputStyle } from "./common"
 
 export interface ItemFormRarityProps {
   initialValue: ItemRarity | undefined
