@@ -1,41 +1,35 @@
-import { Low } from "lowdb"
-import { JSONFile } from "lowdb/node"
-
-import * as path from "path"
-import {
-  DeleteItemInput as DeleteItemInput,
-  Item,
-  NewItem,
-} from "../models/item"
-import { ItemRarity } from "../models/itemRarity"
-import { existsSync } from "fs"
-
-type ItemsDb = {
-  items: Item[]
-}
-
-const dbInit = openDb()
-
-async function openDb(): Promise<Low<ItemsDb>> {
-  const dbPath = path.resolve("./db.json")
-  const adapter = new JSONFile<ItemsDb>(dbPath)
-  const defaultData = { items: [] }
-
-  const db = new Low(adapter, defaultData)
-
-  if (!existsSync(dbPath)) {
-    await db.write()
-  }
-  await db.read()
-
-  return db
-}
+import { Item, ItemId, NewItem } from "../models/item"
+import { dbInit } from "../storage/db"
 
 const itemService = {
   getItems: async () => {
     const db = await dbInit
 
     return db.data.items
+  },
+
+  getItemsByIds: async (itemIds: string[]) => {
+    const db = await dbInit
+
+    const remainingItemIds = [...itemIds]
+    const foundItems = []
+
+    for (const item of db.data.items) {
+      const itemIdIndex = remainingItemIds.indexOf(item.id)
+      if (itemIdIndex != -1) {
+        foundItems.push(item)
+        remainingItemIds.splice(itemIdIndex, 1)
+      }
+      if (remainingItemIds.length == 0) {
+        break
+      }
+    }
+
+    if (remainingItemIds.length > 0) {
+      throw "Not all items were found."
+    }
+
+    return foundItems
   },
 
   addItem: async (newItem: NewItem) => {
@@ -66,7 +60,7 @@ const itemService = {
     return item
   },
 
-  deleteItem: async (input: DeleteItemInput) => {
+  deleteItem: async (input: ItemId) => {
     const db = await dbInit
 
     const itemIndex = db.data.items.findIndex(

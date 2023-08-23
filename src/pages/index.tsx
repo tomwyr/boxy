@@ -1,21 +1,12 @@
-import { useState } from "react"
-import { ItemFormController } from "./components/item/form/controller"
-import { EditItems } from "./components/item/items/edit"
-import { SelectItems } from "./components/item/items/select"
-
-type ItemsViewType = "select" | "edit"
+import { useRouter } from "next/router"
+import { useEffect } from "react"
 
 export default function HomePage() {
-  const [viewType, setViewType] = useState<ItemsViewType>("select")
+  const router = useRouter()
 
-  const content = (() => {
-    switch (viewType) {
-      case "select":
-        return <SelectItems onEdit={() => setViewType("edit")} />
-      case "edit":
-        return <EditItems onBack={() => setViewType("select")} />
-    }
-  })()
+  useEffect(() => {
+    router.push("/select")
+  }, [router])
 
-  return <ItemFormController>{content}</ItemFormController>
+  return null
 }

@@ -1,9 +1,9 @@
 import { useState } from "react"
-import { Dialog } from "../../dialog"
+import { Dialog } from "../../../../client/components/dialog"
 import { ItemFormDeleteConfirmation } from "./deleteConfirmation"
 import { ItemForm } from "./form"
-import { ItemFormStep } from "./types/step"
-import { ItemFormType } from "./types/type"
+import { ItemFormStep } from "../../../../client/components/item/form/types/step"
+import { ItemFormType } from "../../../../client/components/item/form/types/type"
 
 export interface ItemFormDialogProps {
   formType: ItemFormType

@@ -3,7 +3,7 @@ import {
   ItemRarity,
   getItemRarityValue,
 } from "../../../../server/models/itemRarity"
-import ItemRarityProps from "../../../utils/itemRarityProps"
+import ItemRarityProps from "../../../../client/utils/itemRarityProps"
 import { Dropdown } from "../../dropdown"
 import { ItemFormInputLabel, ItemFormInputStyle } from "./common"
 

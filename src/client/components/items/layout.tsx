@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import { ChevronLeftIcon } from "../../icons/chevron_left"
+import { ChevronLeftIcon } from "../icons/chevron_left"
 
 export interface ItemsLayoutProps {
   title: string

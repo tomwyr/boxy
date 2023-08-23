@@ -1,9 +1,9 @@
 import { useSubscription } from "observable-hooks"
 import { ReactNode } from "react"
-import { Item } from "../../../../server/models/item"
-import { trpc } from "../../../../utils/trpc"
-import { useItemFormContext } from "../form/controller"
-import { ItemTile } from "../tile"
+import { Item } from "../../../server/models/item"
+import { trpc } from "../../../utils/trpc"
+import { ItemTile } from "../item/tile"
+import { useItemsContext } from "./controller"
 
 export interface ItemsListProps {
   onItemClick: (item: Item) => void
@@ -17,8 +17,8 @@ export function ItemsList({
   footerItem,
 }: ItemsListProps) {
   const result = trpc.getItems.useQuery()
-  const itemFormContext = useItemFormContext()
-  useSubscription(itemFormContext.itemsChangedEvents, () => result.refetch())
+  const itemsContext = useItemsContext()
+  useSubscription(itemsContext.itemsChangedEvents, () => result.refetch())
 
   return (
     <div className="p-4">

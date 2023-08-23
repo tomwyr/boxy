@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import { ListItem } from "../../listItem"
+import { ListItem } from "../listItem"
 
 export interface ItemsListButtonProps {
   enabled?: boolean

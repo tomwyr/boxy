@@ -7,7 +7,7 @@ import { ItemFormImage } from "./image"
 import { ItemFormName } from "./name"
 import { ItemFormRarity } from "./rarity"
 
-import { ItemFormType } from "./types/type"
+import { ItemFormType } from "../../../../client/components/item/form/types/type"
 
 export interface ItemFormProps {
   formType: ItemFormType
