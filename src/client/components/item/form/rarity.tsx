@@ -1,9 +1,9 @@
 import { useState } from "react"
+import ItemRarityProps from "../../../../client/utils/itemRarityProps"
 import {
   ItemRarity,
-  getItemRarityValue,
+  ItemRarityValues,
 } from "../../../../server/models/itemRarity"
-import ItemRarityProps from "../../../../client/utils/itemRarityProps"
 import { Dropdown } from "../../dropdown"
 import { ItemFormInputLabel, ItemFormInputStyle } from "./common"
 
@@ -14,9 +14,9 @@ export interface ItemFormRarityProps {
 export function ItemFormRarity({ initialValue }: ItemFormRarityProps) {
   const [currentValue, setCurrentValue] = useState(initialValue)
 
-  const items = rarities.map((rarity) => ({
+  const items = ItemRarityValues.map((rarity) => ({
     value: rarity,
-    inputValue: getItemRarityValue(rarity),
+    inputValue: rarity,
     label: ItemRarityProps(rarity).name,
   }))
 
@@ -39,11 +39,3 @@ export function ItemFormRarity({ initialValue }: ItemFormRarityProps) {
     </>
   )
 }
-
-const rarities = [
-  ItemRarity.common,
-  ItemRarity.rare,
-  ItemRarity.unique,
-  ItemRarity.epic,
-  ItemRarity.legendary,
-]

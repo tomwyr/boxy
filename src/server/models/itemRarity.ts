@@ -1,26 +1,24 @@
-export enum ItemRarity {
-  common,
-  rare,
-  unique,
-  epic,
-  legendary,
-}
+export const ItemRarityValues = [
+  "common",
+  "rare",
+  "unique",
+  "epic",
+  "legendary",
+] as const
 
-export function getItemRarityValue(itemRarity: ItemRarity): string {
-  return ItemRarity[itemRarity]
-}
+export type ItemRarity = (typeof ItemRarityValues)[number]
 
 export function getItemRarityProbability(itemRarity: ItemRarity): number {
   switch (itemRarity) {
-    case ItemRarity.common:
+    case "common":
       return 0.5
-    case ItemRarity.rare:
+    case "rare":
       return 0.2
-    case ItemRarity.unique:
+    case "unique":
       return 0.15
-    case ItemRarity.epic:
+    case "epic":
       return 0.1
-    case ItemRarity.legendary:
+    case "legendary":
       return 0.05
   }
 }

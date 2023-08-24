@@ -4,45 +4,45 @@ const ItemRarityProps = (itemRarity: ItemRarity) => {
   return {
     get name(): string {
       switch (itemRarity) {
-        case ItemRarity.common:
+        case "common":
           return "Common"
-        case ItemRarity.rare:
+        case "rare":
           return "Rare"
-        case ItemRarity.unique:
+        case "unique":
           return "Unique"
-        case ItemRarity.epic:
+        case "epic":
           return "Epic"
-        case ItemRarity.legendary:
+        case "legendary":
           return "Legendary"
       }
     },
 
     get textColor(): string {
       switch (itemRarity) {
-        case ItemRarity.common:
+        case "common":
           return "text-item-rarity-common"
-        case ItemRarity.rare:
+        case "rare":
           return "text-item-rarity-rare"
-        case ItemRarity.unique:
+        case "unique":
           return "text-item-rarity-unique"
-        case ItemRarity.epic:
+        case "epic":
           return "text-item-rarity-epic"
-        case ItemRarity.legendary:
+        case "legendary":
           return "text-item-rarity-legendary"
       }
     },
 
     get bgColor(): string {
       switch (itemRarity) {
-        case ItemRarity.common:
+        case "common":
           return "bg-item-rarity-common"
-        case ItemRarity.rare:
+        case "rare":
           return "bg-item-rarity-rare"
-        case ItemRarity.unique:
+        case "unique":
           return "bg-item-rarity-unique"
-        case ItemRarity.epic:
+        case "epic":
           return "bg-item-rarity-epic"
-        case ItemRarity.legendary:
+        case "legendary":
           return "bg-item-rarity-legendary"
       }
     },
