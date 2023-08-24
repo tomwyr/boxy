@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { Item, ItemSchema } from "./item"
+import { ItemSchema } from "./item"
 
 export type Box = z.infer<typeof BoxSchema>
 export const BoxSchema = z.object({
@@ -7,12 +7,13 @@ export const BoxSchema = z.object({
   items: z.array(ItemSchema),
 })
 
-export type NewBox = z.infer<typeof NewBoxSchema>
-export const NewBoxSchema = z.object({
+export type DbBox = z.infer<typeof DbBoxSchema>
+export const DbBoxSchema = z.object({
+  id: z.string(),
   itemIds: z.array(z.string()),
 })
 
-export type BoxId = z.infer<typeof BoxIdSchema>
-export const BoxIdSchema = z.object({
-  boxId: z.string(),
+export type NewBox = z.infer<typeof NewBoxSchema>
+export const NewBoxSchema = z.object({
+  itemIds: z.array(z.string()),
 })

@@ -16,7 +16,7 @@ export function ItemFormDeleteConfirmation({
   const deleteItem = trpc.deleteItem.useMutation().mutateAsync
 
   const onSubmit = async () => {
-    await deleteItem({ itemId: item.id })
+    await deleteItem(item.id)
     onSuccess()
   }
 

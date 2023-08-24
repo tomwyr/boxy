@@ -1,14 +1,14 @@
-import { Item, ItemId, NewItem } from "../models/item"
+import { Item, NewItem } from "../models/item"
 import { dbInit } from "../storage/db"
 
 const itemService = {
-  getItems: async () => {
+  async getItems() {
     const db = await dbInit
 
     return db.data.items
   },
 
-  getItemsByIds: async (itemIds: string[]) => {
+  async getItemsByIds(itemIds: string[]) {
     const db = await dbInit
 
     const remainingItemIds = [...itemIds]
@@ -32,7 +32,7 @@ const itemService = {
     return foundItems
   },
 
-  addItem: async (newItem: NewItem) => {
+  async addItem(newItem: NewItem) {
     const db = await dbInit
 
     const item = {
@@ -46,7 +46,7 @@ const itemService = {
     return item
   },
 
-  updateItem: async (item: Item) => {
+  async updateItem(item: Item) {
     const db = await dbInit
 
     const itemIndex = db.data.items.findIndex((dbItem) => dbItem.id == item.id)
@@ -60,18 +60,20 @@ const itemService = {
     return item
   },
 
-  deleteItem: async (input: ItemId) => {
+  async deleteItem(itemId: string) {
     const db = await dbInit
 
-    const itemIndex = db.data.items.findIndex(
-      (dbItem) => dbItem.id == input.itemId,
-    )
+    const itemIndex = db.data.items.findIndex((dbItem) => dbItem.id == itemId)
     if (itemIndex == -1) {
       throw "Item not found"
     }
     db.data.items.splice(itemIndex, 1)
 
     await db.write()
+  },
+
+  async verifyAllItemsExist(itemIds: string[]) {
+    await this.getItemsByIds(itemIds)
   },
 }
 

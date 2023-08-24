@@ -1,15 +1,7 @@
 import * as trpcNext from "@trpc/server/adapters/next"
 import { z } from "zod"
-import {
-  BoxIdSchema,
-  BoxSchema,
-  NewBoxSchema,
-} from "../../../server/models/box"
-import {
-  ItemIdSchema,
-  ItemSchema,
-  NewItemSchema,
-} from "../../../server/models/item"
+import { BoxSchema, NewBoxSchema } from "../../../server/models/box"
+import { ItemSchema, NewItemSchema } from "../../../server/models/item"
 import boxService from "../../../server/services/boxService"
 import itemService from "../../../server/services/itemService"
 import { publicProcedure, router } from "../../../server/trpc"
@@ -30,11 +22,11 @@ const appRouter = router({
     .mutation(({ input }) => itemService.updateItem(input)),
 
   deleteItem: publicProcedure
-    .input(ItemIdSchema)
+    .input(z.string())
     .mutation(({ input }) => itemService.deleteItem(input)),
 
   getBox: publicProcedure
-    .input(BoxIdSchema)
+    .input(z.string())
     .output(BoxSchema)
     .query(({ input }) => boxService.getBox(input)),
 
@@ -44,7 +36,7 @@ const appRouter = router({
     .mutation(({ input }) => boxService.createBox(input)),
 
   openBox: publicProcedure
-    .input(BoxIdSchema)
+    .input(z.string())
     .query(({ input }) => boxService.openBox(input)),
 })
 

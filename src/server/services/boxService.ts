@@ -1,46 +1,46 @@
-import { Box, BoxId, NewBox } from "../models/box"
+import { Box, NewBox } from "../models/box"
 import { Item } from "../models/item"
 import { getItemRarityProbability } from "../models/itemRarity"
 import { dbInit } from "../storage/db"
 import itemService from "./itemService"
 
 const boxService = {
-  async getBox(input: BoxId): Promise<Box> {
+  async getBox(boxId: string): Promise<Box> {
     const db = await dbInit
 
-    const box = db.data.boxes.find((box) => (box.id = input.boxId))
+    const dbBox = db.data.boxes.find((box) => (box.id = boxId))
 
-    if (!box) {
+    if (!dbBox) {
       throw "Box not found."
     }
 
-    return box
-  },
+    const items = await itemService.getItemsByIds(dbBox.itemIds)
 
-  async createBox(input: NewBox): Promise<Box> {
-    try {
-      const db = await dbInit
-
-      const items = await itemService.getItemsByIds(input.itemIds)
-
-      const box = {
-        id: crypto.randomUUID(),
-        items: items,
-      }
-      db.data.boxes.push(box)
-
-      await db.write()
-
-      return box
-    } catch (e) {
-      console.log(e)
-
-      throw e
+    return {
+      id: dbBox.id,
+      items: items,
     }
   },
 
-  async openBox(input: BoxId): Promise<{ reward: Item }> {
-    const box = await this.getBox(input)
+  async createBox(input: NewBox): Promise<Box> {
+    const db = await dbInit
+
+    await itemService.verifyAllItemsExist(input.itemIds)
+
+    const boxId = crypto.randomUUID()
+    const dbBox = {
+      id: boxId,
+      itemIds: input.itemIds,
+    }
+    db.data.boxes.push(dbBox)
+
+    await db.write()
+
+    return await this.getBox(boxId)
+  },
+
+  async openBox(boxId: string): Promise<{ reward: Item }> {
+    const box = await this.getBox(boxId)
 
     const totalProbability = box.items.reduce(
       (total, item) => total + getItemRarityProbability(item.rarity),

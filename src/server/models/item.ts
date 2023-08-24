@@ -15,8 +15,3 @@ export const NewItemSchema = z.object({
   rarity: z.nativeEnum(ItemRarity),
   imageUrl: z.string(),
 })
-
-export type ItemId = z.infer<typeof ItemIdSchema>
-export const ItemIdSchema = z.object({
-  itemId: z.string(),
-})
