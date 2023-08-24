@@ -1,14 +1,14 @@
 import { existsSync } from "fs"
+import { Low } from "lowdb"
 import { JSONFile } from "lowdb/node"
 import path from "path"
-import { DbBox } from "../models/box"
-import { Item } from "../models/item"
-import { Low } from "lowdb"
+import { DbBox } from "./types/box"
+import { DbItem } from "./types/item"
 
 export const dbInit = openDb()
 
 type DbData = {
-  items: Item[]
+  items: DbItem[]
   boxes: DbBox[]
 }
 

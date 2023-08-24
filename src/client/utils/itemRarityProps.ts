@@ -1,6 +1,6 @@
-import { ItemRarity } from "../../server/models/itemRarity"
+import { ItemRarity } from "../../server/types/itemRarity"
 
-const ItemRarityProps = (itemRarity: ItemRarity) => {
+export const ItemRarityProps = (itemRarity: ItemRarity) => {
   return {
     get name(): string {
       switch (itemRarity) {
@@ -48,5 +48,3 @@ const ItemRarityProps = (itemRarity: ItemRarity) => {
     },
   }
 }
-
-export default ItemRarityProps

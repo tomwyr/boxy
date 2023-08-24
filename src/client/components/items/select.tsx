@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Item } from "../../../server/models/item"
+import { Item } from "../../../server/types/item"
 import { trpc } from "../../../utils/trpc"
 import { DiceIcon } from "../icons/dice"
 import { ItemsLayout } from "./layout"

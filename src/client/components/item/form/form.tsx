@@ -1,4 +1,4 @@
-import { ItemSchema, NewItemSchema } from "../../../../server/models/item"
+import { Item, NewItem } from "../../../../server/types/item"
 import { trpc } from "../../../../utils/trpc"
 import { itemFormName } from "./common"
 import { ItemFormFooter } from "./footer"
@@ -33,7 +33,7 @@ export function ItemForm({
           title: "Add item",
           submitLabel: "Add",
           onSubmit: async () => {
-            const newItem = NewItemSchema.parse(getItemFormData())
+            const newItem = getItemFormData()
             await addItem(newItem)
             onSuccess()
           },
@@ -45,11 +45,10 @@ export function ItemForm({
           title: "Edit item",
           submitLabel: "Save",
           onSubmit: async () => {
-            const itemData = {
+            const item: Item = {
               id: formType.item.id,
               ...getItemFormData(),
             }
-            const item = ItemSchema.parse(itemData)
             await updateItem(item)
             onSuccess()
           },
@@ -87,7 +86,9 @@ function getItemFormData() {
   const form = document.querySelector(formSelector) as HTMLFormElement
   const formData = Object.fromEntries<any>(new FormData(form))
 
-  formData.rarity = parseInt(formData.rarity)
-
-  return formData
+  return {
+    name: formData.name,
+    imageUrl: formData.imageUrl,
+    rarity: formData.rarity,
+  }
 }

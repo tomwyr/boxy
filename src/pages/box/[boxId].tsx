@@ -5,9 +5,7 @@ export default function Box() {
   const router = useRouter()
   const boxId = router.query.boxId as string
 
-  const result = trpc.getBox.useQuery({
-    boxId: boxId,
-  })
+  const result = trpc.getBox.useQuery(boxId)
 
   if (!result.data) {
     return "Loading..."

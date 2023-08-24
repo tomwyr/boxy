@@ -1,4 +1,4 @@
-import { Item } from "../../../../../server/models/item"
+import { Item } from "../../../../../server/types/item"
 
 export type ItemFormType = AddItemForm | EditItemForm
 

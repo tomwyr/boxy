@@ -1,5 +1,5 @@
 import { ReactNode, createContext, useContext, useState } from "react"
-import { Item } from "../../../../server/models/item"
+import { Item } from "../../../../server/types/item"
 import { useItemsContext } from "../../items/controller"
 import { ItemFormDialog } from "./dialog"
 import { ItemFormType } from "./types/type"

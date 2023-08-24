@@ -1,6 +1,6 @@
 import { useSubscription } from "observable-hooks"
 import { ReactNode } from "react"
-import { Item } from "../../../server/models/item"
+import { Item } from "../../../server/types/item"
 import { trpc } from "../../../utils/trpc"
 import { ItemTile } from "../item/tile"
 import { useItemsContext } from "./controller"

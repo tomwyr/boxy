@@ -1,5 +1,5 @@
-import { Item } from "../../../server/models/item"
-import ItemRarityProps from "../../utils/itemRarityProps"
+import { Item } from "../../../server/types/item"
+import { ItemRarityProps } from "../../utils/itemRarityProps"
 import { ListItem } from "../listItem"
 import { ItemImage } from "./image"
 

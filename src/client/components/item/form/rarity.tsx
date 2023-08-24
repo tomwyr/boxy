@@ -1,9 +1,6 @@
 import { useState } from "react"
-import ItemRarityProps from "../../../../client/utils/itemRarityProps"
-import {
-  ItemRarity,
-  ItemRarityValues,
-} from "../../../../server/models/itemRarity"
+import { ItemRarityProps } from "../../../../client/utils/itemRarityProps"
+import { ItemRarity } from "../../../../server/types/itemRarity"
 import { Dropdown } from "../../dropdown"
 import { ItemFormInputLabel, ItemFormInputStyle } from "./common"
 
@@ -14,7 +11,7 @@ export interface ItemFormRarityProps {
 export function ItemFormRarity({ initialValue }: ItemFormRarityProps) {
   const [currentValue, setCurrentValue] = useState(initialValue)
 
-  const items = ItemRarityValues.map((rarity) => ({
+  const items = ItemRarity.options.map((rarity) => ({
     value: rarity,
     inputValue: rarity,
     label: ItemRarityProps(rarity).name,

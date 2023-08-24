@@ -1,4 +1,4 @@
-import { Item } from "../../../../server/models/item"
+import { Item } from "../../../../server/types/item"
 import { trpc } from "../../../../utils/trpc"
 import { ItemFormFooter } from "./footer"
 
