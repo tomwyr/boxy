@@ -1,4 +1,4 @@
-import { Box, NewBox } from "../models/box"
+import { Box, DbBox, NewBox } from "../models/box"
 import { Item } from "../models/item"
 import { getItemRarityProbability } from "../models/itemRarity"
 import { dbInit } from "../storage/db"
@@ -17,7 +17,7 @@ const boxService = {
     const items = await itemService.getItemsByIds(dbBox.itemIds)
 
     return {
-      id: dbBox.id,
+      ...dbBox,
       items: items,
     }
   },
@@ -27,19 +27,19 @@ const boxService = {
 
     await itemService.verifyAllItemsExist(input.itemIds)
 
-    const boxId = crypto.randomUUID()
-    const dbBox = {
-      id: boxId,
+    const dbBox: DbBox = {
+      id: crypto.randomUUID(),
+      status: "closed",
       itemIds: input.itemIds,
     }
     db.data.boxes.push(dbBox)
 
     await db.write()
 
-    return await this.getBox(boxId)
+    return await this.getBox(dbBox.id)
   },
 
-  async openBox(boxId: string): Promise<{ reward: Item }> {
+  async openBox(boxId: string): Promise<Item> {
     const box = await this.getBox(boxId)
 
     const totalProbability = box.items.reduce(
@@ -64,9 +64,7 @@ const boxService = {
       throw "Reward not found."
     }
 
-    return {
-      reward: reward,
-    }
+    return reward
   },
 }
 
