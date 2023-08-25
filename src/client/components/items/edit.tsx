@@ -14,9 +14,9 @@ export function EditItems({ onBack }: EditItemProps) {
   return (
     <ItemsLayout title="Edit items" onBack={onBack}>
       <ItemsList
-        onItemClick={itemFormContext.showForm}
+        onItemClick={(item) => itemFormContext.showForm(item)}
         footerItem={
-          <ItemsListButton onClick={itemFormContext.showForm}>
+          <ItemsListButton onClick={() => itemFormContext.showForm()}>
             <PlusIcon />
           </ItemsListButton>
         }

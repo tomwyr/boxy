@@ -22,7 +22,6 @@ export function ItemFormRarity({ initialValue }: ItemFormRarityProps) {
       <ItemFormInputLabel name="rarity" label="Rarity" />
       <input
         className="hidden"
-        type="number"
         name="rarity"
         readOnly={true}
         value={currentValue ?? -1}
