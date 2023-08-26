@@ -1,30 +1,23 @@
-import { existsSync } from "fs"
-import { Low } from "lowdb"
-import { JSONFile } from "lowdb/node"
-import path from "path"
-import { DbBox } from "./types/box"
-import { DbItem } from "./types/item"
+import { PrismaClient } from "@prisma/client"
+import { items } from "./data"
 
-export const dbInit = openDb()
+export const dbInit = initPrisma()
 
-type DbData = {
-  items: DbItem[]
-  boxes: DbBox[]
-}
+async function initPrisma() {
+  const prisma = new PrismaClient()
 
-async function openDb(): Promise<Low<DbData>> {
-  const dbPath = path.resolve("./db.json")
-  const adapter = new JSONFile<DbData>(dbPath)
-  const defaultData: DbData = {
-    items: [],
-    boxes: [],
+  try {
+    await prisma.$connect()
+
+    const hasItems = (await prisma.item.count()) > 0
+    if (!hasItems) {
+      await prisma.item.createMany({
+        data: items,
+      })
+    }
+  } catch {
+    await prisma.$disconnect()
   }
 
-  const db = new Low(adapter, defaultData)
-  if (!existsSync(dbPath)) {
-    await db.write()
-  }
-  await db.read()
-
-  return db
+  return prisma
 }

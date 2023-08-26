@@ -2,7 +2,7 @@ import { Box } from "../../types/box"
 import { Item } from "../../types/item"
 import { ItemRarity } from "../../types/itemRarity"
 
-export const boxOpener = {
+export const boxReward = {
   getRandomReward(box: Box): Item {
     const totalProbability = box.items.reduce(
       (total, item) => total + getItemRarityProbability(item.rarity),

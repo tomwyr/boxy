@@ -1,13 +1,13 @@
 import { dbInit } from "../storage/db"
-import { DbItem } from "../storage/types/item"
 import { Item, NewItem } from "../types/item"
 
 export const itemService = {
-  async getItem(itemId: string) {
+  async getItem(itemId: string): Promise<Item> {
     const db = await dbInit
 
-    const item = db.data.items.find((item) => item.id == itemId)
-
+    const item = await db.item.findUnique({
+      where: { id: itemId },
+    })
     if (!item) {
       throw "Item not found."
     }
@@ -15,80 +15,47 @@ export const itemService = {
     return item
   },
 
-  async getItems() {
+  async getItems(itemIds?: string[]): Promise<Item[]> {
     const db = await dbInit
 
-    return db.data.items.map((dbItem) => Item.parse(dbItem))
-  },
-
-  async getItemsByIds(itemIds: string[]) {
-    const db = await dbInit
-
-    const remainingItemIds: Array<string> = [...itemIds]
-    const foundItems: Array<DbItem> = []
-
-    for (const dbItem of db.data.items) {
-      const itemIdIndex = remainingItemIds.indexOf(dbItem.id)
-      if (itemIdIndex != -1) {
-        foundItems.push(dbItem)
-        remainingItemIds.splice(itemIdIndex, 1)
-      }
-      if (remainingItemIds.length == 0) {
-        break
-      }
+    let items: Item[]
+    if (itemIds) {
+      items = await db.item.findMany()
+    } else {
+      items = await db.item.findMany({
+        where: { id: { in: itemIds } },
+      })
     }
 
-    if (remainingItemIds.length > 0) {
-      throw "Not all items were found."
-    }
-
-    return foundItems.map((item) => Item.parse(item))
+    return items
   },
 
-  async addItem(newItem: NewItem) {
+  async addItem(newItem: NewItem): Promise<Item> {
     const db = await dbInit
 
-    const dbItem = DbItem.parse({
-      id: crypto.randomUUID(),
-      ...newItem,
-    } satisfies DbItem)
-    db.data.items.push(dbItem)
+    const item = await db.item.create({
+      data: newItem,
+    })
 
-    await db.write()
-
-    return Item.parse(dbItem)
+    return item
   },
 
-  async updateItem(item: Item) {
+  async updateItem(item: Item): Promise<Item> {
     const db = await dbInit
 
-    const dbItemIndex = db.data.items.findIndex(
-      (dbItem) => dbItem.id == item.id,
-    )
-    if (dbItemIndex == -1) {
-      throw "Item not found."
-    }
-    const dbItem = DbItem.parse(item)
-    db.data.items[dbItemIndex] = dbItem
+    const updatedItem = await db.item.update({
+      where: { id: item.id },
+      data: item,
+    })
 
-    await db.write()
-
-    return Item.parse(dbItem)
+    return updatedItem
   },
 
-  async deleteItem(itemId: string) {
+  async deleteItem(itemId: string): Promise<void> {
     const db = await dbInit
 
-    const dbItemIndex = db.data.items.findIndex((dbItem) => dbItem.id == itemId)
-    if (dbItemIndex == -1) {
-      throw "Item not found"
-    }
-    db.data.items.splice(dbItemIndex, 1)
-
-    await db.write()
-  },
-
-  async verifyAllItemsExist(itemIds: string[]) {
-    await this.getItemsByIds(itemIds)
+    await db.item.delete({
+      where: { id: itemId },
+    })
   },
 }

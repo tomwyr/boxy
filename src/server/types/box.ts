@@ -2,7 +2,8 @@ import { z } from "zod"
 import { BoxStatus } from "./boxStatus"
 import { Item } from "./item"
 
-const BaseBox = z.object({
+export type BaseBox = z.infer<typeof BaseBox>
+export const BaseBox = z.object({
   id: z.string(),
   status: BoxStatus,
   items: z.array(Item),

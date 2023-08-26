@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:postgres@localhost:5432/local"
+}
+
+model Item {
+  id          String     @id @default(cuid())
+  name        String
+  rarity      ItemRarity
+  imageUrl    String
+  boxes       Box[]
+  rewardBoxes Box[]      @relation(name: "reward")
+}
+
+model Box {
+  id       String    @id @default(cuid())
+  status   BoxStatus
+  items    Item[]
+  reward   Item?     @relation(fields: [rewardId], references: [id], name: "reward")
+  rewardId String?   @unique
+}
+
+enum ItemRarity {
+  common
+  rare
+  unique
+  epic
+  legendary
+}
+
+enum BoxStatus {
+  open
+  closed
+}

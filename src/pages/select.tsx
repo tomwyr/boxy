@@ -1,7 +1,6 @@
 import { useRouter } from "next/router"
-import { SelectItems } from "../client/components/items/select"
-import { ItemFormController } from "../client/components/item/form/controller"
 import { ItemsController } from "../client/components/items/controller"
+import { SelectItems } from "../client/components/items/select"
 
 export default function Select() {
   const router = useRouter()

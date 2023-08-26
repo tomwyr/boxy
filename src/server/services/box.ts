@@ -1,76 +1,88 @@
 import { dbInit } from "../storage/db"
-import { DbBox } from "../storage/types/box"
-import { NewBox, OpenBox } from "../types/box"
-import { itemService } from "./item"
-import { boxOpener } from "./utils/boxOpener"
+import { BaseBox, Box, ClosedBox, NewBox, OpenBox } from "../types/box"
+import { boxReward } from "./utils/boxReward"
 
 export const boxService = {
-  async getBox(boxId: string) {
+  async getBox(boxId: string): Promise<Box> {
     const db = await dbInit
 
-    const dbBox = db.data.boxes.find((dbBox) => (dbBox.id = boxId))
+    const data = await db.box.findUniqueOrThrow({
+      where: { id: boxId },
+      include: {
+        items: true,
+        reward: true,
+      },
+    })
 
-    if (!dbBox) {
-      throw "Box not found."
-    }
-
-    const items = await itemService.getItemsByIds(dbBox.itemIds)
-
-    const box = {
-      id: dbBox.id,
-      status: dbBox.status,
-      items: items,
-    }
-
-    switch (dbBox.status) {
-      case "closed":
-        return {
-          ...box,
-          status: dbBox.status,
-        }
-      case "open":
-        if (!dbBox.rewardId) {
-          throw "Reward id not found."
-        }
-
-        const reward = await itemService.getItem(dbBox.rewardId)
-
-        return {
-          ...box,
-          status: dbBox.status,
-          reward: reward,
-        }
-    }
+    return Box.parse(data)
   },
 
-  async createBox(newBox: NewBox) {
+  async updateBox(box: Box): Promise<Box> {
     const db = await dbInit
 
-    await itemService.verifyAllItemsExist(newBox.itemIds)
+    const baseBox: BaseBox = box
+    const updatedBox = await db.box.update({
+      where: { id: box.id },
+      data: {
+        ...baseBox,
+        rewardId: getRewardIdOrNull(box),
+        items: {
+          set: box.items.map((item) => ({
+            id: item.id,
+          })),
+        },
+      },
+      include: {
+        items: true,
+        reward: true,
+      },
+    })
 
-    const dbBox: DbBox = {
-      id: crypto.randomUUID(),
-      status: "closed",
-      itemIds: newBox.itemIds,
-    }
-    db.data.boxes.push(dbBox)
-
-    await db.write()
-
-    return await this.getBox(dbBox.id)
+    return Box.parse(updatedBox)
   },
 
-  async openBox(boxId: string) {
+  async createBox(newBox: NewBox): Promise<ClosedBox> {
+    const db = await dbInit
+
+    const data = await db.box.create({
+      data: {
+        status: "closed",
+        items: {
+          connect: newBox.itemIds.map((itemId) => ({
+            id: itemId,
+          })),
+        },
+      },
+      include: {
+        items: true,
+        reward: true,
+      },
+    })
+
+    return ClosedBox.parse(data)
+  },
+
+  async openBox(boxId: string): Promise<OpenBox> {
     const box = await this.getBox(boxId)
-    const reward = boxOpener.getRandomReward(box)
 
+    const baseBox: BaseBox = box
+    const reward = boxReward.getRandomReward(box)
     const openBox: OpenBox = {
-      id: box.id,
-      items: box.items,
+      ...baseBox,
       status: "open",
       reward: reward,
     }
+    const updatedBox = await this.updateBox(openBox)
 
-    return openBox
+    return OpenBox.parse(updatedBox)
   },
+}
+
+function getRewardIdOrNull(box: Box) {
+  switch (box.status) {
+    case "closed":
+      return null
+    case "open":
+      return box.reward.id
+  }
 }
