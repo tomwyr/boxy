@@ -1,4 +1,3 @@
-import { PlusIcon } from "../icons/plus"
 import { useItemFormContext } from "../item/form/controller"
 import { ItemsLayout } from "./layout"
 import { ItemsList } from "./list"
@@ -17,7 +16,7 @@ export function EditItems({ onBack }: EditItemProps) {
         onItemClick={(item) => itemFormContext.showForm(item)}
         footerItem={
           <ItemsListButton onClick={() => itemFormContext.showForm()}>
-            <PlusIcon />
+            Add Item
           </ItemsListButton>
         }
       />

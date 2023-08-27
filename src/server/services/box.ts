@@ -17,6 +17,19 @@ export const boxService = {
     return Box.parse(data)
   },
 
+  async getBoxes(): Promise<Box[]> {
+    const db = await dbInit
+
+    const data = await db.box.findMany({
+      include: {
+        items: true,
+        reward: true,
+      },
+    })
+
+    return data.map((box) => Box.parse(box))
+  },
+
   async updateBox(box: Box): Promise<Box> {
     const db = await dbInit
 

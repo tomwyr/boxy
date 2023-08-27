@@ -9,6 +9,10 @@ export const boxesRouter = router({
     .output(Box)
     .query(({ input }) => boxService.getBox(input)),
 
+  getBoxes: publicProcedure
+    .output(z.array(Box))
+    .query(() => boxService.getBoxes()),
+
   createBox: publicProcedure
     .input(NewBox)
     .output(ClosedBox)

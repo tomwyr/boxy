@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { Item } from "../../../server/types/item"
 import { trpc } from "../../../utils/trpc"
-import { DiceIcon } from "../icons/dice"
 import { ItemsLayout } from "./layout"
 import { ItemsList } from "./list"
 import { ItemsListButton } from "./listButton"
@@ -52,7 +51,7 @@ export function SelectItems({ onEdit, onShowBox }: SelectItemProps) {
             enabled={selectedItemIds.length > 0}
             onClick={onConfirmSelection}
           >
-            <DiceIcon />
+            Create Box
           </ItemsListButton>
         }
       />

@@ -1,15 +1,15 @@
 import { useRouter } from "next/router"
-import { EditItems } from "../client/components/items/edit"
 import { ItemFormController } from "../client/components/item/form/controller"
 import { ItemsController } from "../client/components/items/controller"
+import { EditItems } from "../client/components/items/edit"
 
-export default function Edit() {
+export default function ItemsPage() {
   const router = useRouter()
 
   return (
     <ItemsController>
       <ItemFormController>
-        <EditItems onBack={() => router.push("/select")} />
+        <EditItems onBack={() => router.push("/boxes")} />
       </ItemFormController>
     </ItemsController>
   )
