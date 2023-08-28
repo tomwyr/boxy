@@ -7,10 +7,6 @@ module.exports = {
         dialog: "576px",
       },
 
-      minWidth: {
-        "dropdown-menu-item": "96px",
-      },
-
       colors: {
         "item-rarity-common": "#000000",
         "item-rarity-rare": "#0000FF",

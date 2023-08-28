@@ -76,16 +76,22 @@ export const boxService = {
   },
 
   async openBox(boxId: string): Promise<OpenBox> {
-    const box = await this.getBox(boxId)
+    const db = await dbInit
 
-    const baseBox: BaseBox = box
+    const box = await this.getBox(boxId)
     const reward = boxReward.getRandomReward(box)
-    const openBox: OpenBox = {
-      ...baseBox,
-      status: "open",
-      reward: reward,
-    }
-    const updatedBox = await this.updateBox(openBox)
+
+    const updatedBox = await db.box.update({
+      where: { id: box.id },
+      data: {
+        status: "open",
+        rewardId: reward.id,
+      },
+      include: {
+        items: true,
+        reward: true,
+      },
+    })
 
     return OpenBox.parse(updatedBox)
   },

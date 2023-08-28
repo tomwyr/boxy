@@ -4,6 +4,7 @@ import { Item } from "../../../server/types/item"
 import { trpc } from "../../../utils/trpc"
 import { ItemTile } from "../item/tile"
 import { useItemsContext } from "./controller"
+import PageLoading from "../page/loading"
 
 export interface ItemsListProps {
   onItemClick: (item: Item) => void
@@ -16,30 +17,26 @@ export function ItemsList({
   selectedItemIds = [],
   footerItem,
 }: ItemsListProps) {
-  const result = trpc.getItems.useQuery()
+  const { data: items, refetch: refetchItems } = trpc.getItems.useQuery()
   const itemsContext = useItemsContext()
-  useSubscription(itemsContext.itemsChangedEvents, () => result.refetch())
+  useSubscription(itemsContext.itemsChangedEvents, () => refetchItems())
+
+  if (!items) {
+    return <PageLoading />
+  }
 
   return (
-    <div className="p-4">
-      {!result.data ? (
-        "Loading..."
-      ) : (
-        <>
-          <ul className="list-none">
-            {result.data.map((item) => (
-              <ItemTile
-                key={item.id}
-                item={item}
-                selected={selectedItemIds.includes(item.id)}
-                onClick={() => onItemClick(item)}
-              />
-            ))}
+    <ul>
+      {items.map((item) => (
+        <ItemTile
+          key={item.id}
+          item={item}
+          selected={selectedItemIds.includes(item.id)}
+          onClick={() => onItemClick(item)}
+        />
+      ))}
 
-            {footerItem}
-          </ul>
-        </>
-      )}
-    </div>
+      {footerItem}
+    </ul>
   )
 }

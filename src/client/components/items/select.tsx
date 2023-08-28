@@ -1,16 +1,17 @@
 import { useState } from "react"
 import { Item } from "../../../server/types/item"
 import { trpc } from "../../../utils/trpc"
-import { ItemsLayout } from "./layout"
+import { PageLayout } from "../page/layout"
 import { ItemsList } from "./list"
-import { ItemsListButton } from "./listButton"
+import { ListButtonItem } from "../list/buttonItem"
+import { useRouter } from "next/router"
 
 export interface SelectItemProps {
-  onEdit: () => void
   onShowBox: (boxId: string) => void
 }
 
-export function SelectItems({ onEdit, onShowBox }: SelectItemProps) {
+export function SelectItems({ onShowBox }: SelectItemProps) {
+  const router = useRouter()
   const createBox = trpc.createBox.useMutation().mutateAsync
 
   const [selectedItemIds, setSelectedItemIds] = useState<string[]>([])
@@ -36,25 +37,25 @@ export function SelectItems({ onEdit, onShowBox }: SelectItemProps) {
   }
 
   return (
-    <ItemsLayout
+    <PageLayout
       title="Select items"
-      action={{
-        label: "Edit",
-        onClick: onEdit,
+      backAction={{
+        label: "Boxes",
+        onClick: () => router.push("/boxes"),
       }}
     >
       <ItemsList
         onItemClick={switchItemSelection}
         selectedItemIds={selectedItemIds}
         footerItem={
-          <ItemsListButton
+          <ListButtonItem
             enabled={selectedItemIds.length > 0}
             onClick={onConfirmSelection}
           >
             Create Box
-          </ItemsListButton>
+          </ListButtonItem>
         }
       />
-    </ItemsLayout>
+    </PageLayout>
   )
 }

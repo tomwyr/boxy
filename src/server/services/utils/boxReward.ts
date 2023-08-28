@@ -11,22 +11,15 @@ export const boxReward = {
 
     const rewardProbabilityShift = Math.random() * totalProbability
 
-    let reward: Item | undefined
-
     let currentProbabilityShift = 0.0
     for (let item of box.items) {
       currentProbabilityShift += getItemRarityProbability(item.rarity)
       if (currentProbabilityShift >= rewardProbabilityShift) {
-        reward = item
-        break
+        return item
       }
     }
 
-    if (!reward) {
-      throw "Reward not found."
-    }
-
-    return reward
+    throw "Reward not found."
   },
 }
 

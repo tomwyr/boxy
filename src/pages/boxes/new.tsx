@@ -7,10 +7,7 @@ export default function NewBoxPage() {
 
   return (
     <ItemsController>
-      <SelectItems
-        onEdit={() => router.push("/items")}
-        onShowBox={(boxId) => router.push(`/boxes/${boxId}`)}
-      />
+      <SelectItems onShowBox={(boxId) => router.push(`/boxes/${boxId}`)} />
     </ItemsController>
   )
 }

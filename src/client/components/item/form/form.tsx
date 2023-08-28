@@ -1,4 +1,4 @@
-import { Item, NewItem } from "../../../../server/types/item"
+import { Item } from "../../../../server/types/item"
 import { trpc } from "../../../../utils/trpc"
 import { itemFormName } from "./common"
 import { ItemFormFooter } from "./footer"
@@ -30,7 +30,7 @@ export function ItemForm({
       case "add":
         return {
           initialValue: undefined,
-          title: "Add item",
+          title: "New Item",
           submitLabel: "Add",
           onSubmit: async () => {
             const newItem = getItemFormData()
@@ -42,7 +42,7 @@ export function ItemForm({
       case "edit":
         return {
           initialValue: formType.item,
-          title: "Edit item",
+          title: "Edit Item",
           submitLabel: "Save",
           onSubmit: async () => {
             const item: Item = {

@@ -21,7 +21,7 @@ model Box {
   status   BoxStatus
   items    Item[]
   reward   Item?     @relation(fields: [rewardId], references: [id], name: "reward")
-  rewardId String?   @unique
+  rewardId String?
 }
 
 enum ItemRarity {

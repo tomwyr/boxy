@@ -13,13 +13,12 @@ export function ListItem({
   onClick,
   children,
 }: ListItemProps) {
-  const enabledStyle = enabled
-    ? "cursor-pointer"
-    : "opacity-50 filter grayscale"
+  const cursorStyle = enabled && onClick && "cursor-pointer"
+  const disabledStyle = !enabled && "opacity-50 filter grayscale"
 
   return (
     <li
-      className={`h-16 p-2 rounded-md flex items-center ${className} ${enabledStyle}`}
+      className={`h-16 p-2 rounded-md flex items-center ${className} ${cursorStyle} ${disabledStyle}`}
       onClick={enabled ? onClick : undefined}
     >
       {children}

@@ -1,12 +1,12 @@
 import { Item } from "../../../server/types/item"
 import { ItemRarityProps } from "../../utils/itemRarityProps"
-import { ListItem } from "../listItem"
+import { ListItem } from "../list/item"
 import { ItemImage } from "./image"
 
 export interface ItemTileProps {
   item: Item
   selected?: boolean
-  onClick: () => void
+  onClick?: () => void
 }
 
 export function ItemTile({ item, selected = false, onClick }: ItemTileProps) {
@@ -16,10 +16,11 @@ export function ItemTile({ item, selected = false, onClick }: ItemTileProps) {
   const rarityBgColor = rarityProps.bgColor
 
   const bgColor = selected && rarityBgColor
+  const hoverBgColor = onClick && `hover:${rarityBgColor}`
 
   return (
     <ListItem
-      className={`mb-1 ${bgColor} bg-opacity-5 hover:${rarityBgColor} hover:bg-opacity-10`}
+      className={`mb-1 ${bgColor} bg-opacity-5 ${hoverBgColor} hover:bg-opacity-10`}
       onClick={onClick}
     >
       <ItemImage url={item.imageUrl} />

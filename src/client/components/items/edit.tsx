@@ -1,25 +1,26 @@
+import { ButtonAction } from "../../types"
 import { useItemFormContext } from "../item/form/controller"
-import { ItemsLayout } from "./layout"
+import { PageLayout } from "../page/layout"
 import { ItemsList } from "./list"
-import { ItemsListButton } from "./listButton"
+import { ListButtonItem } from "../list/buttonItem"
 
 export interface EditItemProps {
-  onBack: () => void
+  backAction: ButtonAction
 }
 
-export function EditItems({ onBack }: EditItemProps) {
+export function EditItems({ backAction }: EditItemProps) {
   const itemFormContext = useItemFormContext()
 
   return (
-    <ItemsLayout title="Edit items" onBack={onBack}>
+    <PageLayout title="Items" backAction={backAction}>
       <ItemsList
         onItemClick={(item) => itemFormContext.showForm(item)}
         footerItem={
-          <ItemsListButton onClick={() => itemFormContext.showForm()}>
-            Add Item
-          </ItemsListButton>
+          <ListButtonItem onClick={() => itemFormContext.showForm()}>
+            New Item
+          </ListButtonItem>
         }
       />
-    </ItemsLayout>
+    </PageLayout>
   )
 }
