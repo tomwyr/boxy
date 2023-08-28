@@ -49,7 +49,7 @@ export function SelectItems({ onShowBox }: SelectItemProps) {
         selectedItemIds={selectedItemIds}
         footerItem={
           <ListButtonItem
-            enabled={selectedItemIds.length > 0}
+            enabled={selectedItemIds.length > 1}
             onClick={onConfirmSelection}
           >
             Create Box

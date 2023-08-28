@@ -21,6 +21,9 @@ export const boxService = {
     const db = await dbInit
 
     const data = await db.box.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
       include: {
         items: true,
         reward: true,

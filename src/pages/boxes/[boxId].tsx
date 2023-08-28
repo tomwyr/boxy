@@ -3,8 +3,6 @@ import { ItemTile } from "../../client/components/item/tile"
 import { ListButtonItem } from "../../client/components/list/buttonItem"
 import { PageLayout } from "../../client/components/page/layout"
 import PageLoading from "../../client/components/page/loading"
-import { Box } from "../../server/types/box"
-import { Item } from "../../server/types/item"
 import { trpc } from "../../utils/trpc"
 
 export default function BoxDetails() {
@@ -17,6 +15,8 @@ export default function BoxDetails() {
     return <PageLoading />
   }
 
+  const rewardId = box.status == "open" ? box.reward.id : undefined
+
   return (
     <PageLayout
       title="Box"
@@ -25,42 +25,19 @@ export default function BoxDetails() {
         onClick: () => router.push("/boxes"),
       }}
     >
-      <h2 className="text-2xl mt-4">Items</h2>
-      <BoxItems items={box.items} />
+      <h2 className="text-2xl my-4">Items</h2>
+      <ul>
+        {box.items.map((item) => {
+          const selected = rewardId ? rewardId == item.id : false
+          return <ItemTile key={item.id} item={item} selected={selected} />
+        })}
+      </ul>
 
-      <h2 className="text-2xl mt-4">Reward</h2>
-      <BoxReward
-        box={box}
-        onOpenBox={() => router.push(`/boxes/${boxId}/opening`)}
-      />
+      {box.status == "closed" && (
+        <ListButtonItem onClick={() => router.push(`/boxes/${boxId}/opening`)}>
+          Open
+        </ListButtonItem>
+      )}
     </PageLayout>
   )
-}
-
-interface BoxItemsProps {
-  items: Item[]
-}
-
-function BoxItems({ items }: BoxItemsProps) {
-  return (
-    <ul>
-      {items.map((item) => (
-        <ItemTile key={item.id} item={item} />
-      ))}
-    </ul>
-  )
-}
-
-interface BoxRewardProps {
-  box: Box
-  onOpenBox: () => void
-}
-
-function BoxReward({ box, onOpenBox }: BoxRewardProps) {
-  switch (box.status) {
-    case "closed":
-      return <ListButtonItem onClick={onOpenBox}>Open</ListButtonItem>
-    case "open":
-      return <ItemTile item={box.reward} />
-  }
 }

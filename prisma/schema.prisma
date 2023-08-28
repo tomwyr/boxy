@@ -9,6 +9,7 @@ datasource db {
 
 model Item {
   id          String     @id @default(cuid())
+  createdAt   DateTime   @default(now())
   name        String
   rarity      ItemRarity
   imageUrl    String
@@ -17,11 +18,12 @@ model Item {
 }
 
 model Box {
-  id       String    @id @default(cuid())
-  status   BoxStatus
-  items    Item[]
-  reward   Item?     @relation(fields: [rewardId], references: [id], name: "reward")
-  rewardId String?
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  status    BoxStatus
+  items     Item[]
+  reward    Item?     @relation(fields: [rewardId], references: [id], name: "reward")
+  rewardId  String?
 }
 
 enum ItemRarity {

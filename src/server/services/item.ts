@@ -18,14 +18,12 @@ export const itemService = {
   async getItems(itemIds?: string[]): Promise<Item[]> {
     const db = await dbInit
 
-    let items: Item[]
-    if (itemIds) {
-      items = await db.item.findMany()
-    } else {
-      items = await db.item.findMany({
-        where: { id: { in: itemIds } },
-      })
-    }
+    const items = await db.item.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      where: itemIds && { id: { in: itemIds } },
+    })
 
     return items
   },
