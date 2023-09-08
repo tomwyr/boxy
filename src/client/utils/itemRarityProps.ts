@@ -46,5 +46,20 @@ export const ItemRarityProps = (itemRarity: ItemRarity) => {
           return "bg-item-rarity-legendary"
       }
     },
+
+    get borderColor(): string {
+      switch (itemRarity) {
+        case "common":
+          return "border-item-rarity-common"
+        case "rare":
+          return "border-item-rarity-rare"
+        case "unique":
+          return "border-item-rarity-unique"
+        case "epic":
+          return "border-item-rarity-epic"
+        case "legendary":
+          return "border-item-rarity-legendary"
+      }
+    },
   }
 }

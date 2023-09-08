@@ -18,15 +18,21 @@ export default function BoxesPage() {
   return (
     <PageLayout title="Boxes">
       <ul>
-        <BoxesList
-          items={boxes}
-          onItemClick={(box) => router.push(`/boxes/${box.id}`)}
-        />
-
-        <ListButtonItem onClick={() => router.push("/boxes/new")}>
-          New Box
-        </ListButtonItem>
+        {boxes.length > 0 ? (
+          <BoxesList
+            items={boxes}
+            onItemClick={(box) => router.push(`/boxes/${box.id}`)}
+          />
+        ) : (
+          <span className="pb-2 inline-block text-gray-500">
+            Not boxes yet.
+          </span>
+        )}
       </ul>
+
+      <ListButtonItem onClick={() => router.push("/boxes/new")}>
+        New Box
+      </ListButtonItem>
     </PageLayout>
   )
 }

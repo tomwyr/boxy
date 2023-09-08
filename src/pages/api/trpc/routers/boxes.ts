@@ -1,7 +1,8 @@
 import { z } from "zod"
 import { boxService } from "../../../../server/services/box"
 import { publicProcedure, router } from "../../../../server/trpc"
-import { Box, ClosedBox, NewBox, OpenBox } from "../../../../server/types/box"
+import { Box, ClosedBox, NewBox } from "../../../../server/types/box"
+import { BoxOpening } from "../../../../server/types/boxOpening"
 
 export const boxesRouter = router({
   getBox: publicProcedure
@@ -20,6 +21,6 @@ export const boxesRouter = router({
 
   openBox: publicProcedure
     .input(z.string())
-    .output(OpenBox)
+    .output(BoxOpening)
     .query(({ input }) => boxService.openBox(input)),
 })

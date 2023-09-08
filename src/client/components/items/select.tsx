@@ -1,10 +1,10 @@
+import { useRouter } from "next/router"
 import { useState } from "react"
 import { Item } from "../../../server/types/item"
 import { trpc } from "../../../utils/trpc"
+import { ListButtonItem } from "../list/buttonItem"
 import { PageLayout } from "../page/layout"
 import { ItemsList } from "./list"
-import { ListButtonItem } from "../list/buttonItem"
-import { useRouter } from "next/router"
 
 export interface SelectItemProps {
   onShowBox: (boxId: string) => void
@@ -47,6 +47,12 @@ export function SelectItems({ onShowBox }: SelectItemProps) {
       <ItemsList
         onItemClick={switchItemSelection}
         selectedItemIds={selectedItemIds}
+        headerItemBuilder={(items) => (
+          <SelectFilters
+            items={items}
+            setSelectedItemIds={setSelectedItemIds}
+          />
+        )}
         footerItem={
           <ListButtonItem
             enabled={selectedItemIds.length > 0}
@@ -57,5 +63,33 @@ export function SelectItems({ onShowBox }: SelectItemProps) {
         }
       />
     </PageLayout>
+  )
+}
+
+interface SelectFiltersProps {
+  items: Item[]
+  setSelectedItemIds: (itemIds: string[]) => void
+}
+
+function SelectFilters({ items, setSelectedItemIds }: SelectFiltersProps) {
+  const itemIds = items.map((item) => item.id)
+
+  const filterButton = (label: string, onClick: () => void) => {
+    return (
+      <button
+        type="button"
+        className="min-w-[56px] p-2 my-2 rounded-md hover:bg-slate-50"
+        onClick={onClick}
+      >
+        {label}
+      </button>
+    )
+  }
+
+  return (
+    <div className="flex mb-2 gap-2">
+      {filterButton("All", () => setSelectedItemIds(itemIds))}
+      {filterButton("None", () => setSelectedItemIds([]))}
+    </div>
   )
 }

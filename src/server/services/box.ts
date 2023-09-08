@@ -1,6 +1,7 @@
 import { dbInit } from "../storage/db"
 import { BaseBox, Box, ClosedBox, NewBox, OpenBox } from "../types/box"
-import { boxReward } from "./utils/boxReward"
+import { BoxOpening } from "../types/boxOpening"
+import { boxOpening } from "./utils/boxOpening"
 
 export const boxService = {
   async getBox(boxId: string): Promise<Box> {
@@ -78,17 +79,21 @@ export const boxService = {
     return ClosedBox.parse(data)
   },
 
-  async openBox(boxId: string): Promise<OpenBox> {
+  async openBox(boxId: string): Promise<BoxOpening> {
     const db = await dbInit
 
     const box = await this.getBox(boxId)
-    const reward = boxReward.getRandomReward(box)
+    if (box.status == "open") {
+      throw "Box has already been opened."
+    }
 
-    const updatedBox = await db.box.update({
+    const opening = boxOpening.getRandomBoxOpening(box)
+
+    await db.box.update({
       where: { id: box.id },
       data: {
         status: "open",
-        rewardId: reward.id,
+        rewardId: opening.reward.id,
       },
       include: {
         items: true,
@@ -96,7 +101,7 @@ export const boxService = {
       },
     })
 
-    return OpenBox.parse(updatedBox)
+    return BoxOpening.parse(opening)
   },
 }
 

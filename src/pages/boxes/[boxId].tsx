@@ -29,7 +29,14 @@ export default function BoxDetails() {
       <ul>
         {box.items.map((item) => {
           const selected = rewardId ? rewardId == item.id : false
-          return <ItemTile key={item.id} item={item} selected={selected} />
+          return (
+            <ItemTile
+              key={item.id}
+              item={item}
+              selected={selected}
+              bordered={selected}
+            />
+          )
         })}
       </ul>
 

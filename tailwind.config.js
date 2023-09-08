@@ -11,7 +11,7 @@ module.exports = {
         "item-rarity-common": "#000000",
         "item-rarity-rare": "#0000FF",
         "item-rarity-unique": "#FF00FF",
-        "item-rarity-epic": "#FFF000",
+        "item-rarity-epic": "#00DD00",
         "item-rarity-legendary": "#FF0000",
       },
     },
