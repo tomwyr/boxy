@@ -1,3 +1,7 @@
+# Boxy
+
+A web application allowing to create, manage and open loot boxes. The application is being built using [Next.js](https://nextjs.org/), [Prisma](https://prisma.io/), [tRPC](http://trpc.io/), [TailwindCSS](https://tailwindcss.com/).
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
